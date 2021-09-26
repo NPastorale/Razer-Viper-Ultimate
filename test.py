@@ -7,4 +7,4 @@ device_manager.sync_effects = False
 for device in device_manager.devices:
 
     if "Razer Mouse Dock" == device.name:
-        device.fx.static(255, 255, 255)
+        device.fx.static(1, 1, 1)

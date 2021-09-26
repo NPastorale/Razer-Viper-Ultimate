@@ -9,4 +9,4 @@ for device in device_manager.devices:
 
     if "Razer Viper Ultimate (Wireless)" == device.name:
 
-        pprint(dir(device.fx.static.__getattribute__))
+        pprint(dir(device.fx._lighting_dbus.get_dbus_method.__init__))
