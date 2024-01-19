@@ -62,11 +62,15 @@ def set_brightness(mouse):
         print("not charging")
 
 
-while True:
-    mouse_battery_previous = mouse_battery_current
-    mouse_battery_current = get_mouse().battery_level
+try:
+    while True:
+        mouse_battery_previous = mouse_battery_current
+        mouse_battery_current = get_mouse().battery_level
 
-    if mouse_battery_current != mouse_battery_previous:
-        set_dock_colour(mouse_battery_current, get_dock())
+        if mouse_battery_current != mouse_battery_previous:
+            set_dock_colour(mouse_battery_current, get_dock())
 
-    time.sleep(1)
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    pass
