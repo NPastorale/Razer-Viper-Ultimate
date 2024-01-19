@@ -3,7 +3,8 @@ import time
 import logging
 from colours import linear_gradient
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 steps = 100
 
