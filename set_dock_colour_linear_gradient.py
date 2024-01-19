@@ -1,6 +1,9 @@
 import openrazer.client as razer
 import time
+import logging
 from colours import linear_gradient
+
+logging.basicConfig(level=logging.DEBUG)
 
 steps = 100
 
@@ -28,7 +31,8 @@ def get_dock():
                 dock = device
         return dock
     except:
-        print("No dock detected")
+        logging.critical("No dock detected")
+        exit(1)
 
 
 def get_mouse():
@@ -38,28 +42,31 @@ def get_mouse():
                 mouse = device
         return mouse
     except:
-        print("No mouse detected")
+        logging.critical("No mouse detected")
+        exit(1)
 
 
 def set_dock_colour(mouse_battery, dock):
     if mouse_battery >= UPPER_THRESHOLD:
         dock.fx.static(0, 255, 0)
-        print("Battery is at {}%, setting dock to r:0 g:255 b:0".format(mouse_battery))
+        logging.info(
+            "Battery is at {}%, setting dock to r:0 g:255 b:0".format(mouse_battery))
     elif mouse_battery > LOWER_THRESHOLD:
         dock.fx.static(gradient['r'][mouse_battery-LOWER_THRESHOLD],
                        gradient['g'][mouse_battery-LOWER_THRESHOLD], gradient['b'][mouse_battery-LOWER_THRESHOLD])
-        print("Battery is at {}%, setting dock to r:{} g:{} b:{}".format(
+        logging.info("Battery is at {}%, setting dock to r:{} g:{} b:{}".format(
             mouse_battery, gradient['r'][mouse_battery-LOWER_THRESHOLD], gradient['g'][mouse_battery-LOWER_THRESHOLD], gradient['b'][mouse_battery-LOWER_THRESHOLD]))
     else:
         dock.fx.static(255, 0, 0)
-        print("Battery is at {}%, setting dock to r:255 g:0 b:0".format(mouse_battery))
+        logging.info(
+            "Battery is at {}%, setting dock to r:255 g:0 b:0".format(mouse_battery))
 
 
 def set_brightness(mouse):
     if mouse.is_charging == True:
-        print("charging")
+        logging.info("charging")
     else:
-        print("not charging")
+        logging.info("not charging")
 
 
 try:
