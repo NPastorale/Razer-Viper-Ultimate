@@ -29,22 +29,20 @@ def get_dock():
     try:
         for device in device_manager.devices:
             if "Razer Mouse Dock" == device.name:
-                dock = device
-        return dock
-    except:
-        logging.critical("No dock detected")
-        exit(1)
+                return device
+    except Exception as e:
+        logging.error(f"Error while getting dock: {e}")
+        return None
 
 
 def get_mouse():
     try:
         for device in device_manager.devices:
             if "Razer Viper Ultimate (Wireless)" == device.name:
-                mouse = device
-        return mouse
-    except:
-        logging.critical("No mouse detected")
-        exit(1)
+                return device
+    except Exception as e:
+        logging.error(f"Error while getting mouse: {e}")
+        return None
 
 
 def set_dock_colour(mouse_battery, dock):
@@ -64,20 +62,21 @@ def set_dock_colour(mouse_battery, dock):
 
 
 def set_brightness(mouse):
-    if mouse.is_charging == True:
-        logging.info("charging")
-    else:
-        logging.info("not charging")
+    charging_state = "charging" if mouse.is_charging else "not charging"
+    logging.info(charging_state)
 
 
 try:
     while True:
         mouse_battery_previous = mouse_battery_current
-        mouse_battery_current = get_mouse().battery_level
-
-        if mouse_battery_current != mouse_battery_previous:
-            set_dock_colour(mouse_battery_current, get_dock())
-
+        try:
+            mouse_battery_current = get_mouse().battery_level
+        except Exception as e:
+            logging.error(f"Error while getting mouse battery level: {e}")
+        dock = get_dock()
+        if dock is not None and mouse_battery_current is not None:
+            if mouse_battery_current != mouse_battery_previous:
+                set_dock_colour(mouse_battery_current, dock)
         time.sleep(1)
 
 except KeyboardInterrupt:
