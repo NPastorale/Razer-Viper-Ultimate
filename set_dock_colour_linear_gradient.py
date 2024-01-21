@@ -1,16 +1,19 @@
-import openrazer.client as razer
-import time
-import logging
 from colours import linear_gradient
+import logging
+import time
+import openrazer.client as razer
 
-logging.basicConfig(level=logging.DEBUG,
+logging.basicConfig(level=logging.DEBUG, filename='./logfile.log',
                     format='%(asctime)s - %(levelname)s - %(message)s')
+
+logging.debug("Finished imports and logging configuration")
 
 steps = 100
 
 UPPER_THRESHOLD = 95
 LOWER_THRESHOLD = 15
 
+logging.debug("Set variables")
 
 gradient = linear_gradient(
     '#FF0000', '#00FF00', UPPER_THRESHOLD-LOWER_THRESHOLD)
@@ -20,9 +23,17 @@ mouse_battery_previous = 0
 mouse_charging_state_current = False
 mouse_charging_state_previous = False
 
+logging.debug("Set secondary variables and colour gradient")
 
-device_manager = razer.DeviceManager()
+
+try:
+    device_manager = razer.DeviceManager()
+except Exception as e:
+    logging.fatal(f"Error while getting devices: {e}")
+
 device_manager.sync_effects = False
+
+logging.debug("Get devices")
 
 
 def get_dock():
@@ -35,6 +46,9 @@ def get_dock():
         return None
 
 
+logging.debug("get_dock function defined")
+
+
 def get_mouse():
     try:
         for device in device_manager.devices:
@@ -43,6 +57,9 @@ def get_mouse():
     except Exception as e:
         logging.error(f"Error while getting mouse: {e}")
         return None
+
+
+logging.debug("get_mouse function defined")
 
 
 def set_dock_colour(mouse_battery, dock):
@@ -61,10 +78,16 @@ def set_dock_colour(mouse_battery, dock):
             "Battery is at {}%, setting dock to r:255 g:0 b:0".format(mouse_battery))
 
 
+logging.debug("set_dock_colour function defined")
+
+
 def set_brightness(mouse):
     charging_state = "charging" if mouse.is_charging else "not charging"
     logging.info(charging_state)
 
+
+logging.debug("set_brightness function defined")
+logging.debug("Commencing main loop")
 
 try:
     while True:
@@ -77,7 +100,7 @@ try:
         if dock is not None and mouse_battery_current is not None:
             if mouse_battery_current != mouse_battery_previous:
                 set_dock_colour(mouse_battery_current, dock)
-        time.sleep(1)
+        time.sleep(0.1)
 
 except KeyboardInterrupt:
     pass
