@@ -1,0 +1,15 @@
+[Unit]
+Description=Razer Dock colour manager
+Wants=graphical.target
+After=graphical.target
+
+[Service]
+Environment=DISPLAY=:0
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+ExecStart=/usr/bin/python3 /home/nahue/git/NPastorale/razer-viper-ultimate/set_dock_colour_linear_gradient.py
+WorkingDirectory=/home/nahue/git/NPastorale/razer-viper-ultimate
+Restart=always
+User=nahue
+
+[Install]
+WantedBy=default.target
